@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const protectAdminRoute = require("./../middlewares/protectAdminRoute");
+const protectRoute = require("./../middlewares/protectRoute");
 
 const ArtistModel = require("./../model/Artist");
 const AlbumModel = require("./../model/Album");
@@ -27,7 +29,7 @@ router.get("/", async (req, res, next) => {
 
 /* GET dashboard page  */
 
-router.get("/dashboard", async (req, res, next) => {
+router.get("/dashboard", protectRoute, async (req, res, next) => {
   try {
     const dbRes = await Promise.all([
       ArtistModel.find(),

@@ -32,7 +32,7 @@ router.post("/signin", async (req, res, next) => {
     } else {
       const userObject = foundUser.toObject();
       delete userObject.password;
-      req.session.currentUser = user;
+      req.session.currentUser = userObject;
 
       req.flash("Success", "Wouhou Success!");
       res.redirect("/dashboard");
@@ -47,13 +47,13 @@ router.post("/signup", async (req, res, next) => {
 
     if (foundUser) {
       req.flash("warning", "email already registered");
-      res.redirect("auth/signup");
+      res.redirect("/auth/signup");
     } else {
       const hashedPassword = bcrypt.hashSync(newUser.password, 10);
       newUser.password = hashedPassword;
       await User.create(newUser);
       req.flash("success", "congrats! You are registered");
-      res.redirect("auth/signin");
+      res.redirect("/auth/signin");
     }
   } catch (err) {
     var errorMsg = "";
@@ -61,7 +61,7 @@ router.post("/signup", async (req, res, next) => {
       errorMsg += err.errors[field].message + "\n";
     }
     req.flash("error", errorMsg);
-    res.redirect("auth/signup");
+    res.redirect("/auth/signup");
   }
 });
 
